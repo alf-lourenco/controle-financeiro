@@ -1,0 +1,18 @@
+O usuario gostaria que lhe fosse desenvolvida uma ferramenta onde pudesse ser lançados as suas despesas. Podendo estas despesas serem fixas, parceladas ou compartilhadas.
+
+- Despesas fixas = Energia, agua, alugel, condiminio.
+- Despesas parceladas = Notebook, Tv, Mesa.
+- Despesas compartilhdas = Qualquer despesa que sera dividida por uma ou mais pessoas. Exemplo:Em uma locação de veiculo, de 5 lugares, o valor sera dividida pelo numero total de ocupantes.
+
+Espera-se que nesta ferramenta seja possivel obter visualizações baseada nas despesa, responsaveis, vencimento.
+
+Item:
+valor total:
+Numero de parceladas:
+valor da parcela:
+valor individual:
+responsaveis:
+lancamento:
+vencimento:
+status:
+Descricao da despesa:
