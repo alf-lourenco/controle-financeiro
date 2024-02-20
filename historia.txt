@@ -16,3 +16,16 @@ lancamento:
 vencimento:
 status:
 Descricao da despesa:
+
+Cadastrar pessoas
+cadastrar cartoes de credito
+cadastrar bancos
+cadastrar depesa
+dividir parcelas para meses seguintes
+relacionar pessoas a uma despesa
+Exibir todas as despesas
+exibir despesas pendentes e atrasadas
+exibir despesas baseadas em uma pessoa
+exibix despesa baseada em data de vencimento
+exibir despesa baseada em sua categoria
+exibir somaria de valores baseados em data ou categoria ou responsavel
