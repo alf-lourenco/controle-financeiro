@@ -20,3 +20,7 @@ rad.json
 *.flf
 #Test results file
 TestResults.xml
+#Pasta para teste usando o jest
+testes
+.env
+node_modules
