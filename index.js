@@ -4,9 +4,10 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const main = require('./src/db/connectDB.js');
+const router = require('./src/routers/routers.js');
 
-const server = app.listen(port, () => console.log(`Servidor online!`));
+app.use(express.json());
+app.use('/', router);
 main();
-console.log(server.readyState);
+const server = app.listen(port, () => console.log(`Servidor online!`));
 
-module.exports = { server, port };
