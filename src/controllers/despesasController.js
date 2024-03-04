@@ -4,20 +4,16 @@ async function cadastrarDespesa(despesa) {
   return await Despesa.create(despesa);
 }
 async function listarTodos() {
-  try {
-    return await Despesa.find();
-    
-  } catch (error) {
-    return error
-  }
+  return await Despesa.find();
 }
 const despesasControllers = {
-  creat: async (req, res) => {
+  create: async (req, res) => {
     try {
       const response = await cadastrarDespesa(req.body);
-      res.json({ msg: 'Operação realizada com sucesso', response });
+      res.status(201).json({ msg: 'Operação realizada com sucesso', response });
     } catch (error) {
-      res.json(error);
+      console.log(error);
+      res.status(500).send('Não foi possivel criar despesas. Verifique os valores digitados');
     }
   },
 
@@ -26,9 +22,9 @@ const despesasControllers = {
       const response = await listarTodos();
       res.json(response);
     } catch (error) {
-      res.send('Erro' + error);
+      res.status(500).send('Não foi possivel realizar a operação.');
     }
   },
 };
 
-module.exports = { despesasControllers, cadastrarDespesa,listarTodos };
+module.exports = { despesasControllers, cadastrarDespesa, listarTodos };
