@@ -2,11 +2,11 @@ require('dotenv').config();
 
 const express = require('express');
 const app = express();
-const port = 3000;
+
 const main = require('./src/db/connectDB.js');
+const router = require('./src/routers/routers.js');
 
-const server = app.listen(port, () => console.log(`Servidor online!`));
+app.use(express.json());
+app.use('/', router);
 main();
-console.log(server.readyState);
-
-module.exports = { server, port };
+const server = app.listen(process.env.PORT, () => console.log(`Servidor online!`));

@@ -3,10 +3,9 @@ const mongoose = require('mongoose');
 async function main() {
   try {
     await mongoose.connect(process.env.URL_DB);
-
-    if (mongoose.connection.readyState === 1) console.log('conectado ao banco');
+    console.log('Conectado');
   } catch (error) {
-    console.log('Erro na conecxão com o Banco \n ' + error);
+    console.log('Erro na conexão com o Banco \n ' + error);
   }
 }
 
