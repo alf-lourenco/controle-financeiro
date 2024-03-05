@@ -4,7 +4,7 @@
   "description": "Api para acompanhamento de depesas e receitas",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest -i",
     "start": "nodemon index.js"
   },
   "keywords": [],
