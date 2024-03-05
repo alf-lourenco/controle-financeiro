@@ -1,10 +1,12 @@
 const Despesa = require('../model/Despesas.js');
 
 async function cadastrarDespesa(despesa) {
-  return await Despesa.create(despesa);
+  if (isNaN(despesa.item)) {
+    return await Despesa.create(despesa);
+  } else throw 'Não foi Não foi possivel criar despesas. Verifique os valores digitados cadastrar despesa';
 }
 async function listarTodos() {
-  return await Despesa.find();
+  return Despesa.find();
 }
 const despesasControllers = {
   create: async (req, res) => {
