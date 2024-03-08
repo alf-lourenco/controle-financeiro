@@ -31,13 +31,13 @@ const despesas = new mongoose.Schema(
       type: String,
       required: true,
     },
+    comum: {
+      type: String,
+    },
     situacao: {
       type: String,
       default: 'Pendente',
       enum: ['Pendente', 'Em atraso', 'Finalizada'],
-    },
-    idComum: {
-      type: String,
     },
   },
   {
