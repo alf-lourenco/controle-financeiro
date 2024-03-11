@@ -24,20 +24,20 @@ const despesas = new mongoose.Schema(
       required: true,
     },
     vencimento: {
-      type: Date,
+      type: String,
       required: true,
     },
     descricao: {
       type: String,
       required: true,
     },
-    comum: {
-      type: String,
-    },
     situacao: {
       type: String,
       default: 'Pendente',
       enum: ['Pendente', 'Em atraso', 'Finalizada'],
+    },
+    comum: {
+      type: String,
     },
   },
   {
