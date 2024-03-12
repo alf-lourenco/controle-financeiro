@@ -34,7 +34,7 @@ const despesas = new mongoose.Schema(
     situacao: {
       type: String,
       default: 'Pendente',
-      enum: ['Pendente', 'Em atraso', 'Finalizada'],
+      enum: ['Pendente', 'Atrasada', 'Finalizada'],
     },
     comum: {
       type: String,
