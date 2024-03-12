@@ -29,17 +29,33 @@ const despesasControllers = {
   },
 };
 
-async function cadastrarDespesa(despesa) {
-  const idComun = generateIDComun();
+async function cadastrarDespesa(despesa, idComum = generateIDComum()) {
   let date = despesa.vencimento.split('/');
   const diaInicio = date[0];
   date = new Date(`${date[2]}-${date[1]}-${date[0]}`);
+  let atrasada = despesa.atrasada;
+  let finalizada = despesa.finalizada;
+  let pendente = despesa.pendente;
 
   if (isNaN(despesa.item)) {
     for (let i = 1; i <= despesa.parcelas; i++) {
-      let parcela = { ...despesa, comum: idComun };
+      let situacao = () => {
+        if (atrasada > 0) {
+          atrasada--;
+          return 'Atrasada';
+        } else if (finalizada > 0) {
+          finalizada--;
+          return 'Finalizada';
+        } else if (pendente > 0) {
+          pendente--;
+          return 'Pendente';
+        }
+      };
+
+      let parcela = { ...despesa, comum: idComum };
       parcela.parcelas = i;
       parcela.vencimento = date.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+      parcela.situacao = situacao();
 
       await Despesa.create(parcela);
       date = validarData(date, diaInicio);
@@ -51,7 +67,7 @@ async function listarTodos() {
   return Despesa.find();
 }
 async function deletarTodos() {
-  return Despesa.deleteMany({});
+  return await Despesa.deleteMany({});
 }
 
 /**
@@ -76,7 +92,7 @@ function validarData(date, inicio) {
     return novaData;
   }
 }
-const generateIDComun = () => {
+const generateIDComum = () => {
   const getLetterUppercase = () => {
     return String.fromCharCode(Math.floor(Math.random() * 26) + 65);
   };
@@ -103,4 +119,4 @@ const generateIDComun = () => {
   return password;
 };
 
-module.exports = { despesasControllers, cadastrarDespesa, listarTodos };
+module.exports = { despesasControllers, cadastrarDespesa, listarTodos, deletarTodos };
