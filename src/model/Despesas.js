@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const despesas = new mongoose.Schema(
   {
-    item: {
+    nomeProduto: {
       type: String,
       required: true,
     },
