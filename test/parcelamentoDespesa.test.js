@@ -1,25 +1,28 @@
 require('dotenv').config();
 
 const { default: mongoose } = require('mongoose');
-const { cadastrarDespesa, listarTodos, despesasControllers, deletarTodos } = require('../src/controllers/despesasController.js');
 const main = require('../src/db/connectDB.js');
 const Despesa = require('../src/model/Despesas.js');
+const deletarTodasDespesas = require('../src/services/despesas/deletarTodasDespesas.service.js');
+const listarDespesas = require('../src/services/despesas/listarDespesa.service.js');
+const cadastrarDespesa = require('../src/services/despesas/cadastrarDespesa.service.js');
+
 describe('Crud', () => {
   beforeAll(async () => {
     await main();
-    await Despesa.deleteMany({});
+    await deletarTodasDespesas();
   });
   afterAll(async () => {
-    // await Despesa.deleteMany({});
+    await deletarTodasDespesas();
     await mongoose.disconnect();
   });
   test('Listar Banco vazio', async () => {
-    const resp = await listarTodos();
+    const resp = await listarDespesas();
     expect(resp.length > 0).toBe(false);
   });
   test('Criar despesa Situacao:Pendente', async () => {
     const despesa = {
-      item: 'Notebook',
+      nomeProduto: 'Notebook',
       categoria: 'eletronicos',
       valor: 90,
       parcelas: 5,
@@ -33,7 +36,7 @@ describe('Crud', () => {
   });
   test('Criar despesa Finalizada', async () => {
     const despesa = {
-      item: 'Notebook',
+      nomeProduto: 'Notebook',
       categoria: 'eletronicos',
       valor: 90,
       parcelas: 5,
@@ -45,9 +48,10 @@ describe('Crud', () => {
     const resp = await cadastrarDespesa(despesa);
     expect(resp).toBe('Cadastro realizado com sucesso');
   });
+
   test('Criar despesa com Status: Atrasada, Finalizada, Pendente', async () => {
     const despesa = {
-      item: 'Notebook',
+      nomeProduto: 'Notebook teste',
       categoria: 'eletronicos',
       valor: 90,
       parcelas: 5,
@@ -59,17 +63,17 @@ describe('Crud', () => {
       finalizada: 2,
       situacao: 'Finalizada',
     };
-    const resp = await cadastrarDespesa(despesa, 'ok-1');
-    const atrasada = await Despesa.find({ comum: 'ok-1', situacao: 'Atrasada' });
-    const finalizada = await Despesa.find({ comum: 'ok-1', situacao: 'Finalizada' });
-    const pendente = await Despesa.find({ comum: 'ok-1', situacao: 'Pendente' });
+    const resp = await cadastrarDespesa(despesa);
+    const atrasada = await Despesa.find({ nomeProduto: 'Notebook teste', situacao: 'Atrasada' });
+    const finalizada = await Despesa.find({ nomeProduto: 'Notebook teste', situacao: 'Finalizada' });
+    const pendente = await Despesa.find({ nomeProduto: 'Notebook teste', situacao: 'Pendente' });
 
     expect(atrasada.length).toBe(1);
     expect(finalizada.length).toBe(2);
     expect(pendente.length).toBe(2);
   });
   test('Deletar dados', async () => {
-    const resp = await deletarTodos();
-    expect(resp).toHaveProperty("acknowledged")
+    const resp = await deletarTodasDespesas();
+    expect(resp).toHaveProperty('acknowledged');
   });
 });

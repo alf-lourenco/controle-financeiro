@@ -1,24 +1,27 @@
 require('dotenv').config();
 
 const { default: mongoose } = require('mongoose');
-const { cadastrarDespesa, listarTodos, despesasControllers } = require('../src/controllers/despesasController.js');
 const main = require('../src/db/connectDB.js');
 const Despesa = require('../src/model/Despesas.js');
+const listarDespesas = require('../src/services/despesas/listarDespesa.service.js');
+const deletarTodasDespesas = require('../src/services/despesas/deletarTodasDespesas.service.js');
+const cadastrarDespesa = require('../src/services/despesas/cadastrarDespesa.service.js');
+
 describe('Crud', () => {
   beforeAll(async () => {
     await main();
   });
   afterAll(async () => {
-    await Despesa.deleteMany({});
+    await deletarTodasDespesas();
     await mongoose.disconnect();
   });
   test('Listar Banco vazio', async () => {
-    const resp = await listarTodos();
+    const resp = await listarDespesas();
     expect(resp.length > 0).toBe(false);
   });
   test('Criar despesa Pendentes', async () => {
     const despesa = {
-      item: 'Notebook',
+      nomeProduto: 'Notebook',
       categoria: 'eletronicos',
       valor: 90,
       parcelas: 15,
@@ -32,10 +35,10 @@ describe('Crud', () => {
   });
 
   test('Listar despesas', async () => {
-    const resp = await listarTodos();
+    const resp = await listarDespesas();
     expect(resp.length > 0).toBe(true);
   });
   test('Deletar dados', () => {
-    Despesa.deleteMany();
+    deletarTodasDespesas();
   });
 });
