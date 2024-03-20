@@ -36,7 +36,7 @@ const despesas = new mongoose.Schema(
       default: 'Pendente',
       enum: ['Pendente', 'Atrasada', 'Finalizada'],
     },
-    comum: {
+    IdComumParcelas: {
       type: String,
     },
   },
