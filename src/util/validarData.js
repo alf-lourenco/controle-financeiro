@@ -1,17 +1,6 @@
-const validarData = (date, inicio) => {
-  let dataAtual = new Date(date);
-  let novaData = new Date(date);
-
-  novaData.setUTCMonth(novaData.getUTCMonth() + 1);
-  novaData.setUTCDate(inicio);
-
-  if (novaData.getUTCMonth() - dataAtual.getUTCMonth() > 1) {
-    dataAtual.setUTCMonth(dataAtual.getUTCMonth() + 1);
-    dataAtual.setUTCDate(0);
-
-    return dataAtual;
-  } else {
-    return novaData;
-  }
-};
+function validarData(dia, mes, ano) {
+  const dataFormatada = new Date(`${ano}-${mes}-${dia}`);
+  if (dataFormatada.toDateString() === 'Invalid Date') throw 'Data inválida';
+  return dataFormatada;
+}
 module.exports = validarData;
