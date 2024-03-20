@@ -19,7 +19,7 @@ const validarBodyMiddleware = (req, res, next) => {
   const validate = ajv.compile(schema);
   const valid = validate(req.body);
   if (!valid) {
-    throw new AppError(401, 'Informações invalidas.');
+    throw new AppError(400, 'Informações invalidas.');
   }
   next();
 };
