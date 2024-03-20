@@ -9,7 +9,7 @@ const despesasControllers = {
       res.status(201).json({ response });
     } catch (error) {
       console.log(error);
-      res.status(500).send('Não foi possivel criar despesas. Verifique os valores digitados');
+      res.status(500).send(`Não foi possivel criar despesas. ${error}`);
     }
   },
 
