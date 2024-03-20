@@ -1,14 +1,15 @@
-const verificacaoSituacao = require('../../util/verificacaoSituacao');
+const verificaSituacao = require('../../util/verificaSituacao');
 const { v4: uuidv4 } = require('uuid');
-const validarData = require('../../util/validarData');
+const calcularData = require('../../util/calcularData');
 const Despesa = require('../../model/Despesas');
+const validarData = require('../../util/validarData');
 const { AppError } = require('../../errors/appErrors');
 
 async function cadastrarDespesa(body) {
   const { vencimento, atrasada, finalizada, pendente, nomeProduto, parcelas } = body;
   const [dia, mes, ano] = vencimento.split('/');
-  let dataFormatada = new Date(`${ano}-${mes}-${dia}`);
-  if (dataFormatada.toDateString() === 'Invalid Date') throw 'Data inválida';
+  let dataFormatada = validarData(dia, mes, ano);
+
   const idComum = uuidv4();
   const diaInicio = dia;
 
@@ -17,7 +18,7 @@ async function cadastrarDespesa(body) {
   let parcelaPendente = pendente;
 
   for (let i = 1; i <= parcelas; i++) {
-    let situacao = verificacaoSituacao(parcelaAtrasada, parcelaFinalizada, parcelaPendente);
+    let situacao = verificaSituacao(parcelaAtrasada, parcelaFinalizada, parcelaPendente);
 
     let parcela = { ...body, IdComumParcelas: idComum };
     parcela.parcelas = i;
@@ -40,7 +41,7 @@ async function cadastrarDespesa(body) {
 
     try {
       await Despesa.create(parcela);
-      dataFormatada = validarData(dataFormatada, diaInicio);
+      dataFormatada = calcularData(dataFormatada, diaInicio);
     } catch (error) {
       throw new AppError();
     }
