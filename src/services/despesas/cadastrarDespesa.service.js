@@ -8,6 +8,7 @@ async function cadastrarDespesa(body) {
   const { vencimento, atrasada, finalizada, pendente, nomeProduto, parcelas } = body;
   const [dia, mes, ano] = vencimento.split('/');
   let dataFormatada = new Date(`${ano}-${mes}-${dia}`);
+  if (dataFormatada.toDateString() === 'Invalid Date') throw 'Data inválida';
   const idComum = uuidv4();
   const diaInicio = dia;
 
@@ -18,12 +19,25 @@ async function cadastrarDespesa(body) {
   for (let i = 1; i <= parcelas; i++) {
     let situacao = verificacaoSituacao(parcelaAtrasada, parcelaFinalizada, parcelaPendente);
 
-    let parcela = { ...body, comum: idComum };
+    let parcela = { ...body, IdComumParcelas: idComum };
     parcela.parcelas = i;
     parcela.vencimento = dataFormatada.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
     parcela.situacao = situacao;
-    situacao === 'Atrasada' ? parcelaAtrasada-- : situacao === 'Finalizada' ? parcelaFinalizada-- : parcelaPendente--;
-   
+    switch (situacao) {
+      case 'Atrasada':
+        parcelaAtrasada--;
+        break;
+      case 'Finalizada':
+        parcelaFinalizada--;
+        break;
+      case 'Pendente':
+        parcelaPendente--;
+        break;
+
+      default:
+        break;
+    }
+
     try {
       await Despesa.create(parcela);
       dataFormatada = validarData(dataFormatada, diaInicio);
