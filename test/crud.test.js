@@ -11,13 +11,14 @@ describe('Crud', () => {
   beforeAll(async () => {
     await main();
   });
+
   afterAll(async () => {
     await deletarTodasDespesas();
     await mongoose.disconnect();
   });
   test('Listar Banco vazio', async () => {
     const resp = await listarDespesas();
-    expect(resp.length > 0).toBe(false);
+     expect(resp.length).toBeLessThanOrEqual(0);
   });
   test('Criar despesa Pendentes', async () => {
     const despesa = {
@@ -36,9 +37,7 @@ describe('Crud', () => {
 
   test('Listar despesas', async () => {
     const resp = await listarDespesas();
-    expect(resp.length > 0).toBe(true);
+     expect(resp.length).toBeGreaterThan(0);
   });
-  test('Deletar dados', () => {
-    deletarTodasDespesas();
-  });
+ 
 });

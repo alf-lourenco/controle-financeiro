@@ -16,16 +16,13 @@ describe('Crud', () => {
     await deletarTodasDespesas();
     await mongoose.disconnect();
   });
-  test('Listar Banco vazio', async () => {
-    const resp = await listarDespesas();
-    expect(resp.length > 0).toBe(false);
-  });
+  
   test('Criar despesa Situacao:Pendente', async () => {
     const despesa = {
       nomeProduto: 'Notebook',
       categoria: 'eletronicos',
       valor: 90,
-      parcelas: 5,
+      parcelas: 1,
       responsavel: 'Alfredo',
       vencimento: '25/02/2024',
       descricao: 'Novo notebook, parcelado em infinitas vezes',
@@ -49,7 +46,7 @@ describe('Crud', () => {
     expect(resp).toBe('Cadastro realizado com sucesso');
   });
 
-  test('Criar despesa com Status: Atrasada, Finalizada, Pendente', async () => {
+  test('Criar uma despesa com parcelas contendo as situacoes: Atrasada, Finalizada, Pendente', async () => {
     const despesa = {
       nomeProduto: 'Notebook teste',
       categoria: 'eletronicos',
