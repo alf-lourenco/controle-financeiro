@@ -18,7 +18,7 @@ describe('Crud', () => {
   });
   test('Listar Banco vazio', async () => {
     const resp = await listarDespesas();
-     expect(resp.length).toBeLessThanOrEqual(0);
+    expect(resp.length).toBeLessThanOrEqual(0);
   });
   test('Criar despesa Pendentes', async () => {
     const despesa = {
@@ -37,7 +37,6 @@ describe('Crud', () => {
 
   test('Listar despesas', async () => {
     const resp = await listarDespesas();
-     expect(resp.length).toBeGreaterThan(0);
+    expect(resp.length).toBeGreaterThan(0);
   });
- 
 });
