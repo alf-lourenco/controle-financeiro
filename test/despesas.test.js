@@ -3,21 +3,21 @@ require('dotenv').config();
 const { default: mongoose } = require('mongoose');
 const main = require('../src/db/connectDB.js');
 const Despesa = require('../src/model/Despesas.js');
-const listarDespesas = require('../src/services/despesas/listarDespesa.service.js');
-const deletarTodasDespesas = require('../src/services/despesas/deletarTodasDespesas.service.js');
 const cadastrarDespesa = require('../src/services/despesas/cadastrarDespesa.service.js');
+const buscaPorParametro = require('../src/services/despesas/buscaPorParametro.service.js');
 
-describe('Crud', () => {
+describe('Cria e deleta despesas', () => {
+  const idComum = 'test08';
   beforeAll(async () => {
     await main();
   });
 
   afterAll(async () => {
-    await deletarTodasDespesas();
+    await Despesa.deleteMany({ idComumParcelas: idComum });
     await mongoose.disconnect();
   });
-  test('Listar Banco vazio', async () => {
-    const resp = await listarDespesas();
+  test('Listar parcela com idComum: test08', async () => {
+    const resp = await Despesa.find({ idComumParcelas: idComum });
     expect(resp.length).toBeLessThanOrEqual(0);
   });
   test('Criar despesa Pendentes', async () => {
@@ -25,18 +25,20 @@ describe('Crud', () => {
       nomeProduto: 'Notebook',
       categoria: 'eletronicos',
       valor: 90,
-      parcelas: 15,
+      parcelas: 5,
       responsavel: 'Alfredo',
       vencimento: '25/02/2024',
+      idComumParcelas: idComum,
       descricao: 'Novo notebook, parcelado em infinitas vezes',
       situacao: 'Pendente',
     };
-    const resp = await cadastrarDespesa(despesa);
+    const resp = await cadastrarDespesa(despesa, idComum);
     expect(resp).toBe('Cadastro realizado com sucesso');
   });
 
-  test('Listar despesas', async () => {
-    const resp = await listarDespesas();
+  test('Listar despesas, parametro idComumParcelas: idComum', async () => {
+    const resp = await buscaPorParametro('idComumParcelas', idComum);
+
     expect(resp.length).toBeGreaterThan(0);
   });
 });
