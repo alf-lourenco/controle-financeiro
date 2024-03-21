@@ -24,7 +24,7 @@ const despesas = new mongoose.Schema(
       required: true,
     },
     vencimento: {
-      type: String,
+      type: Date,
       required: true,
     },
     descricao: {
@@ -36,7 +36,7 @@ const despesas = new mongoose.Schema(
       default: 'Pendente',
       enum: ['Pendente', 'Atrasada', 'Finalizada'],
     },
-    IdComumParcelas: {
+    idComumParcelas: {
       type: String,
     },
   },
