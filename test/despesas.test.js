@@ -37,7 +37,7 @@ describe('Cria e deleta despesas', () => {
   });
 
   test('Listar despesas, parametro idComumParcelas: idComum', async () => {
-    const resp = await buscaPorParametro('idComumParcelas', idComum);
+    const resp = await buscaPorParametro({ idComumParcelas: idComum });
 
     expect(resp.length).toBeGreaterThan(0);
   });
