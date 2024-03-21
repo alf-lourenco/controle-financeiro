@@ -2,13 +2,22 @@ const mongoose = require('mongoose');
 
 const despesas = new mongoose.Schema(
   {
-    item: {
+    nomeProduto: {
       type: String,
       required: true,
     },
+    categoria: {
+      type: String,
+      required: true,
+    },
+
     valor: {
       type: Number,
       required: true,
+    },
+    parcelas: {
+      type: Number,
+      default: 1,
     },
     responsavel: {
       type: String,
@@ -25,7 +34,10 @@ const despesas = new mongoose.Schema(
     situacao: {
       type: String,
       default: 'Pendente',
-      enum: ['Pendente', 'Em atraso', 'Finalizada'],
+      enum: ['Pendente', 'Atrasada', 'Finalizada'],
+    },
+    idComumParcelas: {
+      type: String,
     },
   },
   {
