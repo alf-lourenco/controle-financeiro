@@ -3,10 +3,14 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 
-const main = require('./src/db/connectDB.js');
+const connectdb = require('./src/db/connectDB.js');
 const AppRoutes = require('./src/routers/index.routes.js');
 
 app.use(express.json());
-AppRoutes(app);
+
+async function main() {
+  AppRoutes(app);
+  await connectdb();
+  app.listen(process.env.PORT, () => console.log(`Servidor online!`));
+}
 main();
-const server = app.listen(process.env.PORT, () => console.log(`Servidor online!`));
