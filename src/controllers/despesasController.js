@@ -1,3 +1,4 @@
+const buscaPorParametro = require('../services/despesas/buscaPorParametro.service.js');
 const cadastrarDespesa = require('../services/despesas/cadastrarDespesa.service.js');
 const deletarTodasDespesas = require('../services/despesas/deletarTodasDespesas.service.js');
 const listarDespesas = require('../services/despesas/listarDespesa.service.js');
@@ -23,6 +24,27 @@ const despesasControllers = {
       return res.json(response);
     } catch (error) {
       return res.status(500).send('Não foi possivel realizar a operação.');
+    }
+  },
+  getAtrasadaPendente: async (req, res) => {
+    let dataInicio = new Date();
+ console.log("dataInicio ", dataInicio);
+    let dataFim = new Date();
+    dataFim.setUTCMonth(dataFim.getUTCMonth() + 1);
+    dataFim.setUTCDate(0);
+    console.log('dataFim ', dataFim);
+    try {
+      const parametros = {
+        situacao: new RegExp(/(Atrasada|Pendente)/i),
+        vencimento: {
+          $gte: dataInicio,
+          $lte: dataFim,
+        },
+      };
+      const response = await buscaPorParametro(parametros);
+      return res.json(response);
+    } catch (error) {
+      return res.status(500).send('Não foi possivel realizar a operação');
     }
   },
   deleteAll: async (req, res) => {
