@@ -2,6 +2,7 @@ const buscaPorParametro = require('../services/despesas/buscaPorParametro.servic
 const cadastrarDespesa = require('../services/despesas/cadastrarDespesa.service.js');
 const deletarTodasDespesas = require('../services/despesas/deletarTodasDespesas.service.js');
 const listarDespesas = require('../services/despesas/listarDespesa.service.js');
+const criaDataInicio = require('../util/criaDataInicio.js');
 const isValidDiaMesAno = require('../util/isValidDiaMesAno.js');
 const despesasControllers = {
   create: async (req, res) => {
@@ -27,24 +28,22 @@ const despesasControllers = {
     }
   },
   getAtrasadaPendente: async (req, res) => {
-    let dataInicio = new Date();
- console.log("dataInicio ", dataInicio);
+    let dataInicio = criaDataInicio(req.body.dataInicio);
     let dataFim = new Date();
     dataFim.setUTCMonth(dataFim.getUTCMonth() + 1);
     dataFim.setUTCDate(0);
-    console.log('dataFim ', dataFim);
     try {
       const parametros = {
         situacao: new RegExp(/(Atrasada|Pendente)/i),
         vencimento: {
           $gte: dataInicio,
-          $lte: dataFim,
+          $lte: `${dataFim.getFullYear()}-${dataFim.getUTCMonth() + 1}-${dataFim.getUTCDate()}`,
         },
       };
       const response = await buscaPorParametro(parametros);
       return res.json(response);
     } catch (error) {
-      return res.status(500).send('Não foi possivel realizar a operação');
+      return res.status(500).json({msg:'Não foi possivel realizar a operação',erro:error.message});
     }
   },
   deleteAll: async (req, res) => {
