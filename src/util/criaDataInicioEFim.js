@@ -1,10 +1,21 @@
-function criaDataInicio(value) {
-  if (value === '' || value === undefined) {
-    const dataInicio = new Date();
-    dataInicio.setUTCDate(1);
-    return `${dataInicio.getFullYear()}-${dataInicio.getUTCMonth() + 1}-${dataInicio.getUTCDate()}`;
+function parametrosParaBusca(value1, value2) {
+  if (value1 === '' || value2 === '' || value1 === undefined || value2 === undefined) {
+    const parametros = {
+      situacao: new RegExp(/(Atrasada|Pendente)/i),
+      vencimento: {
+        $lte: criaDataFim(),
+      },
+    };
+    return parametros;
   }
-  return value;
+  const parametros = {
+    situacao: new RegExp(/(Atrasada|Pendente)/i),
+    vencimento: {
+      $gte: value1,
+      $lte: value2,
+    },
+  };
+  return parametros;
 }
 function criaDataFim(value) {
   if (value === '' || value === undefined) {
@@ -16,4 +27,4 @@ function criaDataFim(value) {
 
   return value;
 }
-module.exports = { criaDataInicio, criaDataFim };
+module.exports = parametrosParaBusca;
