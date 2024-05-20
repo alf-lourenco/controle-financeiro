@@ -1,8 +1,8 @@
 require('dotenv').config();
-
 const { default: mongoose } = require('mongoose');
 const connectDB = require('../src/db/connectDB');
 const buscaPorParametro = require('../src/services/despesas/buscaPorParametro.service');
+const parametrosParaBusca = require('../src/util/criaDataInicioEFim');
 
 describe('Filtrar tarefas do mes atual', () => {
   beforeAll(async () => {
@@ -11,45 +11,28 @@ describe('Filtrar tarefas do mes atual', () => {
   afterAll(async () => {
     await mongoose.disconnect();
   });
-  test('Filtra parcelas atrasadas e pendentes com vencimento no mes atual', async () => {
-    const novaRegex = new RegExp(/(Atrasada|Pendente)/i); // Corrigindo a expressão regular
-    console.log(novaRegex);
-    // const amostra = [
-    //   {
-    //     _id: '65fc70906691f7740ab517db',
-    //     nomeProduto: 'notebook',
-    //     categoria: 'eletronicos',
-    //     valor: 900,
-    //     parcelas: 2,
-    //     responsavel: 'Alfredo',
-    //     vencimento: '2025-04-30T00:00:00.000Z',
-    //     descricao: 'Novo notebook, parcelado em infinitas vezes',
-    //     situacao: 'atrasada',
-    //     idComumParcelas: 'c851467c-378e-4132-af8f-823ef6859c67',
-    //     createdAt: '2024-03-21T17:38:24.728Z',
-    //     updatedAt: '2024-03-21T17:38:24.728Z',
-    //   },
-    //   {
-    //     _id: '65fc70906691f7740ab517db',
-    //     nomeProduto: 'notebook',
-    //     categoria: 'eletronicos',
-    //     valor: 900,
-    //     parcelas: 2,
-    //     responsavel: 'Alfredo',
-    //     vencimento: '2025-04-30T00:00:00.000Z',
-    //     descricao: 'Novo notebook, parcelado em infinitas vezes',
-    //     situacao: 'Pendente',
-    //     idComumParcelas: 'c851467c-378e-4132-af8f-823ef6859c67',
-    //     createdAt: '2024-03-21T17:38:24.728Z',
-    //     updatedAt: '2024-03-21T17:38:24.728Z',
-    //   },
-    // ];
-    //   const despesas = await buscaDespesaAtrasadaOuPendente(){
+  const situacaoVencimento = new RegExp(/(Atrasada|Pendente)/i);
 
-    // }
-    const amostra = await buscaPorParametro({ situacao: novaRegex });
+  test('Filtra parcelas atrasadas e pendentes com vencimento no mes atual ou anterior', async () => {
+    const parametros = parametrosParaBusca();
+    const amostra = await buscaPorParametro(parametros);
     amostra.forEach((item) => {
-      expect(novaRegex.test(item.situacao)).toBe(true); // Testando se a situação corresponde à nova regex
+      const dataFim = new Date(item.vencimento);
+      expect(situacaoVencimento.test(item.situacao)).toBe(true);
+      expect(dataFim <= new Date(parametros.vencimento.$lte)).toBe(true);
+    });
+  });
+
+  test('Filtrar parcelas data de inicio: 2024-05-01 e data de fim: 2024-05-31', async () => {
+    const parametros = parametrosParaBusca('2024-05-01', '2024-05-31');
+    const response = await buscaPorParametro(parametros);
+    response.forEach((item) => {
+      const data = new Date(item.vencimento);
+      const dataInicio = new Date(parametros.vencimento.$gte);
+      const dataFim = new Date(parametros.vencimento.$lte);
+      const comparacaoDatas = data >= dataInicio || data <= dataFim;
+      expect(situacaoVencimento.test(item.situacao)).toBe(true);
+      expect(comparacaoDatas).toBe(true);
     });
   });
 });
