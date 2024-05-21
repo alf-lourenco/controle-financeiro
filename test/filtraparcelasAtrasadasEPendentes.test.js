@@ -11,10 +11,6 @@ describe('Filtrar tarefas do mes atual', () => {
   afterAll(async () => {
     await mongoose.disconnect();
   });
-  test('Filtra parcelas atrasadas e pendentes com vencimento no mes atual', async () => {
-    const novaRegex = new RegExp(/(Atrasada|Pendente)/i);
-    const amostra = await buscaPorParametro({ situacao: novaRegex });
-  const situacaoVencimento = new RegExp(/(Atrasada|Pendente)/i);
 
   test('Filtra parcelas atrasadas e pendentes com vencimento no mes atual ou anterior', async () => {
     const parametros = parametrosParaBusca();
