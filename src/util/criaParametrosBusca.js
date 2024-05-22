@@ -1,5 +1,4 @@
 function parametrosParaBusca(status, data = []) {
-  console.log('data ', !data.includes(undefined) && !data.includes(''));
   const parametros = {
     situacao: new RegExp('(' + status[0] + '|' + status[1] + ')', 'i'),
   };
