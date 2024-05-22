@@ -12,7 +12,7 @@ describe('Filtrar tarefas do mes atual', () => {
     await mongoose.disconnect();
   });
   const situacaoVencimento = new RegExp(/(Atrasada|Pendente)/, 'i');
-  
+
   test('Filtra parcelas atrasadas e pendentes com vencimento no mes atual ou anterior', async () => {
     const parametros = parametrosParaBusca(['Atrasada', 'Pendente']);
     const amostra = await buscaPorParametro(parametros);
@@ -24,7 +24,7 @@ describe('Filtrar tarefas do mes atual', () => {
   });
 
   test('Filtrar parcelas data de inicio: 2024-05-01 e data de fim: 2024-05-31', async () => {
-    const parametros = parametrosParaBusca(['Atrasada', 'Pendente'], ['2024-05-01', '2024-05-31']);
+    const parametros = parametrosParaBusca(['Atrasada', 'Pendente'], '2024-05-01', '2024-05-31');
     const response = await buscaPorParametro(parametros);
     response.forEach((item) => {
       const data = new Date(item.vencimento);

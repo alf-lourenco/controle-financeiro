@@ -29,7 +29,7 @@ const despesasControllers = {
   },
   getAtrasadaPendente: async (req, res) => {
     try {
-      const parametros = parametrosParaBusca(['Atrasada', 'Pendente'], [req.body.dataInicio, req.body.dataFim]);
+      const parametros = parametrosParaBusca(['Atrasada', 'Pendente'], req.body.dataInicio, req.body.dataFim);
       const response = await buscaPorParametro(parametros);
       return res.status(201).json(response);
     } catch (error) {
@@ -39,7 +39,7 @@ const despesasControllers = {
   getAllPendentes: async (req, res) => {
     try {
       const { dataFim, dataInicio } = req.body;
-      const parametros = parametrosParaBusca(['Pendente'], [dataInicio, dataFim]);
+      const parametros = parametrosParaBusca(['Pendente'], dataInicio, dataFim);
       const response = await buscaPorParametro(parametros);
       return res.status(201).json(response);
     } catch (error) {

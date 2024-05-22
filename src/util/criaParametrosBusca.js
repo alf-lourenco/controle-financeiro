@@ -1,10 +1,10 @@
-function parametrosParaBusca(status, data = []) {
+function parametrosParaBusca(status, dataInicio = '', dataFim = '') {
   const parametros = {
     situacao: new RegExp('(' + status[0] + '|' + status[1] + ')', 'i'),
   };
 
-  if (!data.includes(undefined) && !data.includes('') && data.length > 0) {
-    parametros.vencimento = { $gte: data[0], $lte: data[1] };
+  if (dataInicio !== '' && dataFim !== '') {
+    parametros.vencimento = { $gte: dataInicio, $lte: dataFim };
     return parametros;
   } else if (status.includes('Atrasada')) {
     parametros.vencimento = { $lte: criaDataFim() };
