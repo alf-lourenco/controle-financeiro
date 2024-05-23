@@ -6,10 +6,10 @@ function parametrosParaBusca(status, dataInicio = '', dataFim = '') {
   if (dataInicio !== '' && dataFim !== '') {
     parametros.vencimento = { $gte: dataInicio, $lte: dataFim };
     return parametros;
-  } else if (status.includes('Atrasada')) {
+  } else if (status.includes('Atrasada') && status.includes('Pendente')) {
     parametros.vencimento = { $lte: criaDataFim() };
     return parametros;
-  } else {
+  } else if (status.every((item) => item === 'Pendente')) {
     return parametros;
   }
 }
