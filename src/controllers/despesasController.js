@@ -22,7 +22,7 @@ const despesasControllers = {
   getAll: async (req, res) => {
     try {
       const response = await listarDespesas();
-      return res.status(201).json(response);
+      return res.status(200).json(response);
     } catch (error) {
       return res.status(500).send('Não foi possivel realizar a operação.');
     }
@@ -31,7 +31,7 @@ const despesasControllers = {
     try {
       const parametros = parametrosParaBusca(['Atrasada', 'Pendente'], req.body.dataInicio, req.body.dataFim);
       const response = await buscaPorParametro(parametros);
-      return res.status(201).json(response);
+      return res.status(200).json(response);
     } catch (error) {
       return res.status(500).json({ msg: 'Não foi possivel realizar a operação', erro: error.message });
     }
@@ -41,7 +41,7 @@ const despesasControllers = {
       const { dataFim, dataInicio } = req.body;
       const parametros = parametrosParaBusca(['Pendente'], dataInicio, dataFim);
       const response = await buscaPorParametro(parametros);
-      return res.status(201).json(response);
+      return res.status(200).json(response);
     } catch (error) {
       return res.status(500).json({ msg: 'Não foi possivel realizar a operação', erro: error.message });
     }
@@ -49,7 +49,7 @@ const despesasControllers = {
   deleteAll: async (req, res) => {
     try {
       const response = await deletarTodasDespesas();
-      return res.status(201).send('Arquivos deletados com sucesso');
+      return res.status(200).send('Arquivos deletados com sucesso');
     } catch (error) {
       return res.status(500).send('Não foi possivel realizar a operação.');
     }
