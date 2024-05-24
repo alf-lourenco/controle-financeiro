@@ -7,7 +7,7 @@ describe('teste para a funcao parametrosBusca', () => {
     const response = parametrosParaBusca(['Atrasada', 'Pendente'], '2024-01-31', '2024-06-10');
     expect(response).toEqual(exemplo);
   });
-  test('busca despesas Atrasadas ou Pendentes, data padrão', () => {
+  test('busca despesas Atrasadas ou Pendentes, data nao definida', () => {
     const exemplo = { situacao: new RegExp(/Atrasada|Pendente/, 'i'), vencimento: { $lte: criaDataFim() } };
     const response = parametrosParaBusca(['Atrasada', 'Pendente']);
     expect(response).toEqual(exemplo);
