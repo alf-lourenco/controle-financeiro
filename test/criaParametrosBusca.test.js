@@ -1,13 +1,14 @@
-const { criaDataFim, parametrosParaBusca } = require('../src/util/criaParametrosBusca');
+const criaDataFim = require('../src/util/criaDataFim');
+const parametrosParaBusca  = require('../src/util/criaParametrosBusca');
 
 describe('teste para a funcao parametrosBusca', () => {
   test('Busca despesas Atradas ou Pendentes, datas definidas', () => {
-    const exemplo = { situacao: new RegExp(/(Atrasada|Pendente)/, 'i'), vencimento: { $gte: '2024-01-31', $lte: '2024-06-10' } };
+    const exemplo = { situacao: new RegExp(/Atrasada|Pendente/, 'i'), vencimento: { $gte: '2024-01-31', $lte: '2024-06-10' } };
     const response = parametrosParaBusca(['Atrasada', 'Pendente'], '2024-01-31', '2024-06-10');
     expect(response).toEqual(exemplo);
   });
   test('busca despesas Atrasadas ou Pendentes, data padrão', () => {
-    const exemplo = { situacao: new RegExp(/(Atrasada|Pendente)/, 'i'), vencimento: { $lte: criaDataFim() } };
+    const exemplo = { situacao: new RegExp(/Atrasada|Pendente/, 'i'), vencimento: { $lte: criaDataFim() } };
     const response = parametrosParaBusca(['Atrasada', 'Pendente']);
     expect(response).toEqual(exemplo);
   });

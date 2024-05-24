@@ -2,7 +2,7 @@ require('dotenv').config();
 const { default: mongoose } = require('mongoose');
 const connectDB = require('../src/db/connectDB');
 const buscaPorParametro = require('../src/services/despesas/buscaPorParametro.service');
-const { parametrosParaBusca } = require('../src/util/criaParametrosBusca');
+const parametrosParaBusca = require('../src/util/criaParametrosBusca');
 
 describe('Filtrar tarefas do mes atual', () => {
   beforeAll(async () => {
@@ -11,7 +11,7 @@ describe('Filtrar tarefas do mes atual', () => {
   afterAll(async () => {
     await mongoose.disconnect();
   });
-  const situacaoVencimento = new RegExp(/(Atrasada|Pendente)/, 'i');
+  const situacaoVencimento = new RegExp(/Atrasada|Pendente/, 'i');
 
   test('Filtra parcelas atrasadas e pendentes com vencimento no mes atual ou anterior', async () => {
     const parametros = parametrosParaBusca(['Atrasada', 'Pendente']);
