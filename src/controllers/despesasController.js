@@ -2,7 +2,7 @@ const buscaPorParametro = require('../services/despesas/buscaPorParametro.servic
 const cadastrarDespesa = require('../services/despesas/cadastrarDespesa.service.js');
 const deletarTodasDespesas = require('../services/despesas/deletarTodasDespesas.service.js');
 const listarDespesas = require('../services/despesas/listarDespesa.service.js');
-const { parametrosParaBusca } = require('../util/criaParametrosBusca.js');
+const parametrosParaBusca = require('../util/criaParametrosBusca.js');
 const isValidDiaMesAno = require('../util/isValidDiaMesAno.js');
 const despesasControllers = {
   create: async (req, res) => {
@@ -29,23 +29,16 @@ const despesasControllers = {
   },
   getAtrasadaPendente: async (req, res) => {
     try {
-      const parametros = parametrosParaBusca(['Atrasada', 'Pendente'], req.body.dataInicio, req.body.dataFim);
+      const situacao = req.body.situacao.split(',');
+      const parametros = parametrosParaBusca(situacao, req.body.dataInicio, req.body.dataFim);
       const response = await buscaPorParametro(parametros);
       return res.status(200).json(response);
     } catch (error) {
+      console.log(error);
       return res.status(500).json({ msg: 'Não foi possivel realizar a operação', erro: error.message });
     }
   },
-  getAllPendentes: async (req, res) => {
-    try {
-      const { dataFim, dataInicio } = req.body;
-      const parametros = parametrosParaBusca(['Pendente'], dataInicio, dataFim);
-      const response = await buscaPorParametro(parametros);
-      return res.status(200).json(response);
-    } catch (error) {
-      return res.status(500).json({ msg: 'Não foi possivel realizar a operação', erro: error.message });
-    }
-  },
+
   deleteAll: async (req, res) => {
     try {
       const response = await deletarTodasDespesas();
