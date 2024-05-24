@@ -1,22 +1,21 @@
-function parametrosParaBusca(status, dataInicio = '', dataFim = '') {
-  const parametros = {
-    situacao: new RegExp('(' + status[0] + '|' + status[1] + ')', 'i'),
-  };
+const criaDataFim = require('./criaDataFim');
 
-  if (dataInicio !== '' && dataFim !== '') {
-    parametros.vencimento = { $gte: dataInicio, $lte: dataFim };
-    return parametros;
-  } else if (status.includes('Atrasada') && status.includes('Pendente')) {
-    parametros.vencimento = { $lte: criaDataFim() };
-    return parametros;
-  } else if (status.every((item) => item === 'Pendente')) {
-    return parametros;
+function parametrosParaBusca(status, dataInicio = null, dataFim = null) {
+  const parametros = {
+    situacao: new RegExp(status.join('|'), 'i'),
+    vencimento: validaVencimento(dataInicio, dataFim),
+  };
+  return parametros;
+}
+module.exports = parametrosParaBusca;
+
+function validaVencimento(dataInicio, dataFim) {
+  const vencimento = {};
+  if (!dataInicio && !dataFim) {
+    vencimento['$lte'] = criaDataFim();
+    return vencimento;
   }
+  if (dataInicio) vencimento['$gte'] = dataInicio;
+  if (dataFim) vencimento['$lte'] = dataFim;
+  return vencimento;
 }
-function criaDataFim() {
-  const dataFim = new Date();
-  dataFim.setUTCMonth(dataFim.getUTCMonth() + 1);
-  dataFim.setUTCDate(0);
-  return `${dataFim.getFullYear()}-${dataFim.getUTCMonth() + 1}-${dataFim.getUTCDate()}`;
-}
-module.exports = { parametrosParaBusca, criaDataFim };
