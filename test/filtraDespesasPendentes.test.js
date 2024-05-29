@@ -29,14 +29,14 @@ describe('Filtra despesas pendentes', () => {
     await mongoose.disconnect();
   });
   test('Filtra desepesa pendente', async () => {
-    const parametros = parametrosParaBusca(['Pendente']);
+    const parametros = parametrosParaBusca({ situacao: 'Pendente' });
     const exemplo = await buscaPorParametro(parametros);
     expect(exemplo.length).toBeGreaterThan(0);
     expect(exemplo.every((item) => item.situacao === 'Pendente')).toBe(true);
   });
   test('filtra despesa pendente. situacao Atrasada', async () => {
-    const exemplo = await buscaPorParametro({});
+    const exemplo = await buscaPorParametro({ situacao: 'Pendente' });
     expect(exemplo.length).toBeGreaterThan(0);
-    expect(exemplo.every((item) => item.situacao === 'Pendente')).toBe(false);
+    expect(exemplo.every((item) => item.situacao === 'Atrasada')).toBe(false);
   });
 });
