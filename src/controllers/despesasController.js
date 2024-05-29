@@ -1,7 +1,6 @@
 const buscaPorParametro = require('../services/despesas/buscaPorParametro.service.js');
 const cadastrarDespesa = require('../services/despesas/cadastrarDespesa.service.js');
 const deletarTodasDespesas = require('../services/despesas/deletarTodasDespesas.service.js');
-const listarDespesas = require('../services/despesas/listarDespesa.service.js');
 const parametrosParaBusca = require('../util/criaParametrosBusca.js');
 const isValidDiaMesAno = require('../util/isValidDiaMesAno.js');
 const despesasControllers = {
@@ -19,23 +18,13 @@ const despesasControllers = {
     }
   },
 
-  getAll: async (req, res) => {
+  getDespesas: async (req, res) => {
     try {
-      const response = await listarDespesas();
-      return res.status(200).json(response);
-    } catch (error) {
-      return res.status(500).send('Não foi possivel realizar a operação.');
-    }
-  },
-  getAtrasadaPendente: async (req, res) => {
-    try {
-      const situacao = req.body.situacao.split(',');
-      const parametros = parametrosParaBusca(situacao, req.body.dataInicio, req.body.dataFim);
+      const parametros = parametrosParaBusca(req.body);
       const response = await buscaPorParametro(parametros);
       return res.status(200).json(response);
     } catch (error) {
-      console.log(error);
-      return res.status(500).json({ msg: 'Não foi possivel realizar a operação', erro: error.message });
+      return res.status(500).send('Não foi possivel realizar a operação.');
     }
   },
 
