@@ -1,21 +1,34 @@
-const criaDataFim = require('./criaDataFim');
-
-function parametrosParaBusca(status, dataInicio = null, dataFim = null) {
-  const parametros = {
-    situacao: new RegExp(status.join('|'), 'i'),
-    vencimento: validaVencimento(dataInicio, dataFim),
-  };
-  return parametros;
+function criaPropriedade(value) {
+  if (value) return (value = new RegExp(value.replace(',', '|'), 'i'));
 }
-module.exports = parametrosParaBusca;
+function removePropUndefined(objeto) {
+  const response = { ...objeto };
+  for (let prop in response) {
+    if (response[prop] === undefined) delete response[prop];
+  }
+  return response;
+}
+function criaPropriedadeVencimento(dataInicio, dataFim) {
+  if (dataInicio || dataFim) {
+    const vencimento = {};
 
-function validaVencimento(dataInicio, dataFim) {
-  const vencimento = {};
-  if (!dataInicio && !dataFim) {
-    vencimento['$lte'] = criaDataFim();
+    if (dataInicio) vencimento['$gte'] = dataInicio;
+    if (dataFim) vencimento['$lte'] = dataFim;
+
     return vencimento;
   }
-  if (dataInicio) vencimento['$gte'] = dataInicio;
-  if (dataFim) vencimento['$lte'] = dataFim;
-  return vencimento;
 }
+
+function parametrosParaBusca(value) {
+  const { situacao, dataInicio, dataFim, idComumParcelas, categoria, responsavel } = value;
+  const parametros = {
+    situacao: criaPropriedade(situacao),
+    responsavel: criaPropriedade(responsavel),
+    categoria: criaPropriedade(categoria),
+    vencimento: criaPropriedadeVencimento(dataInicio, dataFim),
+    idComumParcelas: idComumParcelas,
+  };
+  const response = removePropUndefined(parametros);
+  return response;
+}
+module.exports = parametrosParaBusca;
