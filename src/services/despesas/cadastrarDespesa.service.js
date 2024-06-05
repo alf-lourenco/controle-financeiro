@@ -9,9 +9,8 @@ async function cadastrarDespesa(body, idComumParcelas = '') {
     await Despesa.insertMany(parcelas);
     return 'Cadastro realizado com sucesso';
   } catch (error) {
-    throw new AppError();
+    throw error;
   }
-
 }
 
 module.exports = cadastrarDespesa;

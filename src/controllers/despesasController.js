@@ -13,8 +13,7 @@ const despesasControllers = {
         return res.status(201).json({ response });
       }
     } catch (error) {
-      console.log(error);
-      return res.status(500).send(`Não foi possivel criar despesas. ${error}`);
+      return res.status(500).send(`Não foi possivel criar despesas. ${error.message}`);
     }
   },
 
@@ -24,7 +23,7 @@ const despesasControllers = {
       const response = await buscaPorParametro(parametros);
       return res.status(200).json(response);
     } catch (error) {
-      return res.status(500).send('Não foi possivel realizar a operação.');
+      return res.status(500).send(`Não foi possível realizar a operação: ${error.message}`);
     }
   },
 
@@ -33,7 +32,7 @@ const despesasControllers = {
       const response = await deletarTodasDespesas();
       return res.status(200).send('Arquivos deletados com sucesso');
     } catch (error) {
-      return res.status(500).send('Não foi possivel realizar a operação.');
+      return res.status(500).send(`Não foi possível realizar a operação: ${error.message}`);
     }
   },
 };
