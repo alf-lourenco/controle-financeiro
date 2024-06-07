@@ -1,5 +1,9 @@
 function criaPropriedade(value) {
-  if (value) return (value = new RegExp(value.replace(',', '|'), 'i'));
+  if (value) {
+    const response = {};
+    response['$in'] = value.split(',');
+    return response;
+  }
 }
 function removePropUndefined(objeto) {
   const response = { ...objeto };
