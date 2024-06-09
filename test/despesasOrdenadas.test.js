@@ -12,7 +12,7 @@ describe('verifica se das despesas estao chegando ordenadas ', () => {
       nomeProduto: 'Celular',
       categoria: 'eletronicos',
       valor: 200,
-      parcelas: 1,
+      parcelas: 10,
       responsavel: 'Alfredo,Ana',
       vencimento: '03/01/2024',
       descricao: 'teste de parcelamento',
@@ -22,7 +22,7 @@ describe('verifica se das despesas estao chegando ordenadas ', () => {
       nomeProduto: 'Teclado',
       categoria: 'eletronicos',
       valor: 200,
-      parcelas: 1,
+      parcelas: 10,
       responsavel: 'Alfredo,Ana',
       vencimento: '03/01/2023',
       descricao: 'teste de parcelamento',
@@ -36,9 +36,9 @@ describe('verifica se das despesas estao chegando ordenadas ', () => {
     await mongoose.disconnect();
   });
   test('Ordenadas por vencimento', async () => {
-    const response = await buscaPorParametro({});
-    const ordenadoPeloDB = response.map((vencimento) => vencimento.vencimento);
-    const exemploOrdenado = response.map((vencimento) => vencimento.vencimento).sort();
+    const response = await buscaPorParametro({ situacao: 'Pendente' });
+    const ordenadoPeloDB = response.map((item) => item.vencimento);
+    const exemploOrdenado = response.map((item) => item.vencimento).sort((a, b) => a - b);
     expect(ordenadoPeloDB).toEqual(exemploOrdenado);
   });
 });
